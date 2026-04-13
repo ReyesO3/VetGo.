@@ -1,0 +1,113 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "VetGo - Inicio de Sesión";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/vetgo_1/css/login_forms.css" />
+    <style>
+        /* small fallback styles in case the css file is missing */
+        /* small fallback styles in case the css file is missing */
+        body { background: linear-gradient(to right, #dbeafe, #e0f2fe); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { width: 420px; margin: 50px auto; background: #f8fafc; padding: 24px; border-radius: 10px; box-shadow: 0px 5px 20px rgba(0,0,0,0.08); }
+        .roles { display:flex; gap:8px; margin-bottom:14px; }
+        .roles a { flex:1; text-align:center; padding:8px; border-radius:6px; background:#2563eb; color:white; text-decoration:none; }
+        .roles a.btn-secondary { background:#6b7280; }
+        .captcha-box { display:inline-block; padding:10px 14px; background:#dbeafe; border-radius:6px; letter-spacing:6px; font-weight:600; }
+        .verify-btn { margin-left:8px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Iniciar Sesión</h2>
+
+        @if (TempData["RegisterMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["RegisterMessage"]</div>
+        }
+
+        @if(TempData["ApprovalWarning"] != null)
+        {
+            <div class="alert alert-warning">@TempData["ApprovalWarning"]</div>
+        }
+
+        @if (ViewData["Role"] != null)
+        {
+            <p>Iniciar sesión como: <strong>@ViewData["Role"]</strong></p>
+        }
+
+        <p class="subtitle">Ingresa a tu cuenta para continuar</p>
+
+        @if(TempData["ResetSuccess"] != null)
+        {
+            <div class="alert alert-success">@TempData["ResetSuccess"]</div>
+        }
+
+        <!-- ROLES -->
+        <div class="roles">
+            <a class="btn-secondary" href="/Login">Dueño</a>
+            <a href="/Login/Veterinario">Profesional</a>
+            <a href="/Login/Admin">Admin</a>
+        </div>
+
+        <!-- FORMULARIO -->
+        <form method="post" asp-action="Index" asp-controller="Login">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="role" value="@(ViewData["Role"] ?? string.Empty)" />
+
+            <label>Email</label>
+            <input name="email" value="@(TempData["RegisteredEmail"] ?? string.Empty)" placeholder="tu@email.com" required />
+
+            <label>Contraseña</label>
+            <input type="password" name="password" placeholder="********" required />
+
+            <label>Código de verificación</label>
+            <div class="captcha-row">
+                <span class="captcha-box" id="captcha">S S B G Y 7</span>
+                <button type="button" class="verify-btn" id="refreshCaptcha">⟳</button>
+            </div>
+
+            <input id="captchaInput" name="captchaInput" type="text" placeholder="Ingresa el código" />
+
+            <button type="submit" class="btn-login" style="margin-top:12px;">Iniciar Sesión</button>
+        </form>
+
+        <p style="color:red">@ViewBag.Error</p>
+
+        <!-- LINKS -->
+        <div class="links" style="margin-top:12px; font-size:13px;">
+            <a href="/Login/Register">¿No tienes cuenta? Regístrate</a>
+        </div>
+
+        @* Añadido enlace para restablecer contraseña *@
+        <p>
+            <a class="btn btn-link" href="/Account/ForgotPassword">¿Olvidaste tu contraseña?</a>
+        </p>
+    </div>
+
+    <script>
+        function randomCaptcha(){
+          const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+          let out = '';
+          for(let i=0;i<6;i++){
+            out += chars[Math.floor(Math.random()*chars.length)];
+            if(i < 5) out += ' ';
+          }
+          return out;
+        }
+
+        const capBox = document.getElementById('captcha');
+        const refresh = document.getElementById('refreshCaptcha');
+        if(capBox && refresh){
+            refresh.onclick = () => { capBox.textContent = randomCaptcha(); };
+        }
+    </script>
+
+</body>
+</html>

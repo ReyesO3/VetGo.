@@ -1,0 +1,77 @@
+@model IEnumerable<VetGo.Models.VeterinarioCitaViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "VetGo - Citas del Día";
+}
+
+<link rel="stylesheet" href="~/Veterinario/citas.css" />
+
+<!-- HEADER -->
+<header class="top-bar">
+
+  <section class="logo">
+    <h1>VetGo</h1>
+    <small>Dr./Dra. doc12</small>
+  </section>
+
+  <form asp-controller="Login" asp-action="Logout" method="post" class="logout-form">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="logout-btn">Cerrar Sesión</button>
+  </form>
+
+</header>
+
+<!-- NAV -->
+<nav class="menu">
+  <ul>
+    <li>
+      <a asp-controller="Veterinario" asp-action="Index">Inicio</a>
+    </li>
+    <li class="active">Citas del Día</li>
+    <li>
+      <a asp-controller="Veterinario" asp-action="Pacientes">Pacientes</a>
+    </li>
+    <li>
+      <a asp-controller="Veterinario" asp-action="Mensajes">Mensajes</a>
+    </li>
+  </ul>
+</nav>
+
+<!-- CONTENIDO -->
+<main class="appointments">
+
+  <header class="appointments-header">
+    <h2>Citas del Día</h2>
+    <p>Gestiona tus citas programadas</p>
+  </header>
+
+  @if (Model != null && Model.Any())
+  {
+      foreach (var cita in Model)
+      {
+  <article class="appointment">
+    <section>
+      <strong>@cita.PropietarioNombre</strong>
+      <span class="badge @(cita.Estado == "Confirmada" ? "confirmed" : "pending")">@cita.Estado</span>
+      <p>@cita.MascotaNombre · @cita.MascotaEspecie</p>
+    </section>
+
+    <time class="time">@cita.Fecha.ToString("h:mm tt")</time>
+
+    <section class="actions">
+      <a asp-controller="Historia_Clinica" asp-action="Index" class="btn secondary">Ver Historial</a>
+      <a asp-controller="Citas" asp-action="Details" asp-route-id="@cita.IdCita" class="btn primary">Ver Cita</a>
+    </section>
+  </article>
+      }
+  }
+  else
+  {
+  <p>No hay citas para hoy.</p>
+  }
+
+</main>
+
+<footer class="footer">
+  <small>© 2025 VetGo. Todos los derechos reservados.</small>
+</footer>

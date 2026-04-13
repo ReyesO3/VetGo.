@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VetGo</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/VetGo.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">VetGo</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    @* Role-specific navigation: only show the nav for the current role to avoid sharing actions *@
+                    @if (User?.Identity?.IsAuthenticated ?? false)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin</a></li>
+                            </ul>
+                        }
+                        else if (User.IsInRole("Veterinario"))
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Veterinario" asp-action="Index">Inicio Vet</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Veterinario" asp-action="Citas">Citas</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Veterinario" asp-action="Pacientes">Pacientes</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Veterinario" asp-action="Mensajes">Mensajes</a></li>
+                            </ul>
+                        }
+                        else if (User.IsInRole("Usuario"))
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Mascotas" asp-action="Index">Mascotas</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Citas" asp-action="Index">Citas</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="MensajesChats" asp-action="Index">Chat</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-controller="Historia_Clinica" asp-action="Index">Historial</a></li>
+                            </ul>
+                        }
+
+                        <partial name="_LoginPartial" />
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Veterinarios" asp-action="Index">Veterinarios</a></li>
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    @* Development debug info to help verify authentication/roles *@
+    @if (Env.IsDevelopment())
+    {
+        <div class="container mt-2">
+            @{ 
+                var isAut = User?.Identity?.IsAuthenticated ?? false;
+                var name = User?.Identity?.Name ?? "(anonymous)";
+                var roles = new System.Collections.Generic.List<string>();
+                if (User != null)
+                {
+                    if (User.IsInRole("Admin")) roles.Add("Admin");
+                    if (User.IsInRole("Veterinario")) roles.Add("Veterinario");
+                    if (User.IsInRole("Usuario")) roles.Add("Usuario");
+                }
+            }
+            <div class="alert alert-info py-1" role="alert" style="font-size:12px;">
+                Debug: Authenticated = @isAut; User = @name; Roles = @string.Join(", ", roles)
+            </div>
+        </div>
+    }
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - VetGo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,79 @@
+@model IEnumerable<VetGo.Models.Usuario>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/vetgo_1/css/admin_aprobado.css" />
+
+<header class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1>VetGo Admin</h1>
+        <p>Administrador</p>
+    </div>
+    <nav>
+        <a asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
+    </nav>
+</header>
+
+<main class="container mt-4">
+    <section class="row mb-4">
+        <article class="col-md-4 card p-3">
+            <h2>Cuentas Pendientes</h2>
+            <p>@(ViewData["TotalPending"] ?? 0)</p>
+        </article>
+        <article class="col-md-4 card p-3">
+            <h2>Cuentas Aprobadas</h2>
+            <p>@(Model?.Count() ?? 0)</p>
+        </article>
+        <article class="col-md-4 card p-3">
+            <h2>Total de Cuentas</h2>
+            <p>@(ViewData["TotalUsers"] ?? 0)</p>
+        </article>
+    </section>
+
+    <nav class="mb-3">
+        <a asp-action="Index">Pendientes (@(ViewData["TotalPending"] ?? 0))</a> |
+        <span class="font-weight-bold">Aprobadas (@(Model?.Count() ?? 0))</span> |
+        <a asp-action="Rejected">Rechazadas</a>
+    </nav>
+
+    <section>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var u in Model)
+            {
+                <article class="card mb-3 p-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4>@u.Nombre</h4>
+                            <p>@u.Email</p>
+                            @if (u.Rol == "Veterinario" && !string.IsNullOrEmpty(u.Licencia))
+                            {
+                                <p>Licencia: @u.Licencia</p>
+                            }
+                            <p><span class="badge bg-secondary">@u.Rol</span></p>
+                        </div>
+
+                        <div class="text-end">
+                            <form asp-action="Unapprove" method="post" style="display:inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn btn-warning" style="display:inline-block;background:#f1c40f;border:none;padding:6px 12px;border-radius:8px;">Revocar aprobación</button>
+                            </form>
+
+                            <form asp-action="Reject" method="post" style="display:inline; margin-left:8px">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn btn-danger" style="display:inline-block;color:#e74c3c;background-color:transparent;border:2px solid #e74c3c;padding:6px 12px;border-radius:8px;">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            }
+        }
+        else
+        {
+            <p>No hay cuentas aprobadas.</p>
+        }
+    </section>
+</main>

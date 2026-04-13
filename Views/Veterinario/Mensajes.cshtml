@@ -1,0 +1,146 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "VetGo - Mensajes";
+}
+
+<link rel="stylesheet" href="~/Veterinario/mensajes.css" />
+
+<!-- HEADER SUPERIOR -->
+<header class="header">
+
+    <section class="logo">
+
+        <section class="logo-text">
+            <strong>VetGo</strong>
+            <span>Dr./Dra. doc12</span>
+        </section>
+    </section>
+
+    <form asp-controller="Login" asp-action="Logout" method="post" class="logout-form">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="logout-btn">Cerrar Sesión</button>
+    </form>
+
+</header>
+
+<!-- NAV BAR PRINCIPAL -->
+<nav class="navbar">
+    <ul>
+        <li>
+            <a asp-controller="Veterinario" asp-action="Index">Inicio</a>
+        </li>
+        <li>
+            <a asp-controller="Veterinario" asp-action="Citas">Citas del Día</a>
+        </li>
+        <li>
+            <a asp-controller="Veterinario" asp-action="Pacientes">Pacientes</a>
+        </li>
+        <li class="active">
+            Mensajes
+        </li>
+    </ul>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main class="content">
+
+    <!-- LISTA DE MENSAJES -->
+    <section class="mensajes" id="contacts">
+        <header>
+            <h3>Mensajes</h3>
+            <p class="subtitulo">Tus conversaciones</p>
+        </header>
+
+        <!-- Contacto 1 -->
+        <article class="contacto active">
+
+            <figure class="avatar">
+                <span>DMG</span>
+                <span class="estado-online"></span>
+            </figure>
+
+            <section class="info">
+                <strong>Dra. María García</strong>
+                <p>Hola, ¿cómo está Max?</p>
+            </section>
+
+            <section class="notificaciones">
+                <span>2</span>
+            </section>
+
+        </article>
+
+        <!-- Contacto 2 -->
+        <article class="contacto">
+
+            <figure class="avatar azul">
+                <span>DCR</span>
+            </figure>
+
+            <section class="info">
+                <strong>Dr. Carlos Rodríguez</strong>
+                <p>La cita es mañana a las 10 AM</p>
+            </section>
+
+        </article>
+
+    </section>
+
+    <!-- PANEL DE CHAT -->
+    <section class="chat-panel" id="chatPanel">
+        <p class="seleccion">Selecciona un contacto para comenzar a chatear</p>
+    </section>
+
+</main>
+
+<script>
+async function loadContacts(){
+  const res = await fetch('/MensajesChats/ContactsForCurrent');
+  const contacts = await res.json();
+  const container = document.getElementById('contactsContainer');
+  if(!contacts || contacts.length === 0){
+    container.innerText = 'No hay conversaciones.';
+    return;
+  }
+
+  container.innerHTML = '';
+  contacts.forEach(c => {
+    const el = document.createElement('article');
+    el.className = 'contacto';
+    el.innerHTML = `<section class="info"><strong>${c.name}</strong><p>${c.email}</p></section>`;
+    el.onclick = () => loadConversation(c.id);
+    container.appendChild(el);
+  });
+}
+
+async function loadConversation(contactId){
+  const res = await fetch(`/MensajesChats/ConversationWith?contactId=${contactId}`);
+  const messages = await res.json();
+  const panel = document.getElementById('chatPanel');
+  panel.innerHTML = '';
+  const convo = document.createElement('div');
+  convo.className = 'conversation';
+  messages.forEach(m => {
+    const msg = document.createElement('div');
+    msg.className = 'message ' + (m.IdEmisor === m.IdEmisor ? 'sent' : 'received');
+    msg.innerText = m.Contenido;
+    convo.appendChild(msg);
+  });
+
+  const input = document.createElement('textarea');
+  input.id = 'messageInput';
+  const btn = document.createElement('button');
+  btn.innerText = 'Enviar';
+  btn.onclick = async () => {
+    const payload = { IdEmisor: 0, IdReceptor: contactId, Contenido: document.getElementById('messageInput').value };
+    await fetch('/MensajesChats/Send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    loadConversation(contactId);
+  };
+
+  panel.appendChild(convo);
+  panel.appendChild(input);
+  panel.appendChild(btn);
+}
+
+loadContacts();
+</script>

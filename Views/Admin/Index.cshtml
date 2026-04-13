@@ -1,0 +1,60 @@
+@model IEnumerable<VetGo.Models.Usuario>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/vetgo_1/css/admin_inicio.css" />
+
+<main class="container mt-4">
+    <h2>Panel de Administración</h2>
+
+    <section class="row mt-3">
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h5>Total de mascotas</h5>
+                <p class="display-6">@ViewData["TotalMascotas"]</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h5>Total de usuarios</h5>
+                <p class="display-6">@ViewData["TotalUsers"]</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pending mt-4">
+        <h3>Solicitudes pendientes</h3>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var u in Model)
+            {
+                <article class="card user-card mb-2">
+                    <div class="d-flex justify-content-between align-items-center p-2">
+                        <div>
+                            <h5>@u.Nombre</h5>
+                            <p>@u.Email</p>
+                            @if (!string.IsNullOrEmpty(u.Licencia)) { <small>Licencia: @u.Licencia</small> }
+                        </div>
+                        <div>
+                            <form asp-action="Approve" method="post" style="display:inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn btn-success" style="display:inline-block;color:white;background-color:#2ecc71;border:none;padding:6px 12px;border-radius:8px;">Aprobar</button>
+                            </form>
+                            <form asp-action="Reject" method="post" style="display:inline; margin-left:8px">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn btn-danger" style="display:inline-block;color:#e74c3c;background-color:transparent;border:2px solid #e74c3c;padding:6px 12px;border-radius:8px;">Rechazar</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            }
+        }
+        else
+        {
+            <p>No hay solicitudes pendientes.</p>
+        }
+    </section>
+</main>

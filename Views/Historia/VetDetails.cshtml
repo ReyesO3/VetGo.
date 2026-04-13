@@ -1,0 +1,17 @@
+@model VetGo.Models.Mascota
+@{
+    ViewData["Title"] = "Historia clínica (veterinario) - " + Model.Nombre;
+}
+
+<h2>Historia clínica de @Model.Nombre</h2>
+
+@foreach(var h in Model.Historia_Clinica.OrderByDescending(x => x.Fecha))
+{
+    <div class="vet-entry">
+        <div><em>@h.Fecha.ToString("dd/MM/yyyy")</em></div>
+        <p><strong>Diagnóstico:</strong> @h.Diagnostico</p>
+        <p><strong>Tratamiento:</strong> @h.Tratamiento</p>
+        <p><strong>Notas:</strong> @h.Notas</p>
+        <p><strong>Realizado por:</strong> @h.Veterinario?.Nombre</p>
+    </div>
+}

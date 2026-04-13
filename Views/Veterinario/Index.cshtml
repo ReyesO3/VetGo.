@@ -1,0 +1,148 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "VetGo - Veterinario";
+}
+
+<link rel="stylesheet" href="~/Veterinario/index.css" />
+
+<!-- VISTA: Veterinario - Panel -->
+
+<!-- HEADER SUPERIOR -->
+<header class="top-bar">
+
+  <section class="logo">
+    <i class="fa-solid fa-shield-dog"></i>
+    <span>VetGo</span>
+    <small>Dr./Dra. doc12</small>
+  </section>
+
+  <a href="/Login" class="logout-btn">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Cerrar Sesión
+  </a>
+
+</header>
+
+<!-- MENÚ DE NAVEGACIÓN -->
+<nav class="menu">
+  <ul>
+    <li class="active">
+      <i class="fa-solid fa-house"></i>
+      <span>Inicio</span>
+    </li>
+
+    <li>
+      <i class="fa-solid fa-calendar-days"></i>
+      <a href="/Veterinario/Citas">Citas del Día</a>
+    </li>
+
+    <li>
+      <i class="fa-solid fa-users"></i>
+      <a href="/Veterinario/Pacientes">Pacientes</a>
+    </li>
+
+    <li>
+      <i class="fa-solid fa-comment-dots"></i>
+      <a href="/Veterinario/Mensajes">Mensajes</a>
+    </li>
+  </ul>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main>
+
+  <!-- TARJETAS DE ESTADÍSTICAS -->
+  <section class="stats">
+
+    <article class="stat-card">
+      <h2>3</h2>
+      <p>Citas Hoy</p>
+      <i class="fa-solid fa-calendar-check"></i>
+    </article>
+
+    <article class="stat-card">
+      <h2>1</h2>
+      <p>Pendientes</p>
+      <i class="fa-solid fa-clock"></i>
+    </article>
+
+    <article class="stat-card">
+      <h2>2</h2>
+      <p>Completadas</p>
+      <i class="fa-solid fa-circle-check"></i>
+    </article>
+
+    <article class="stat-card">
+      <h2>5</h2>
+      <p>Pacientes Totales</p>
+      <i class="fa-solid fa-user-group"></i>
+    </article>
+
+  </section>
+
+  <!-- PRÓXIMAS CITAS -->
+  <section class="appointments">
+
+    <header class="appointments-header">
+      <h3>Próximas Citas</h3>
+      <p>Agenda del día de hoy</p>
+    </header>
+
+    <!-- CITA -->
+    <article class="appointment">
+
+      <section class="info">
+        <strong>Juan Pérez</strong>
+        <span class="badge confirmed">Confirmada</span>
+        <p>Max · Perro · Golden Retriever</p>
+      </section>
+
+      <time class="time">10:00 AM</time>
+
+      <section class="actions">
+        <button title="Iniciar videollamada">
+          <i class="fa-solid fa-video"></i>
+        </button>
+      </section>
+
+    </article>
+
+    <article class="appointment">
+
+      <section class="info">
+        <strong>María López</strong>
+        <span class="badge pending">Pendiente</span>
+        <p>Luna · Gato · Siamés</p>
+      </section>
+
+      <time class="time">11:30 AM</time>
+
+      <section class="actions">
+        <button>
+          <i class="fa-solid fa-video"></i>
+        </button>
+      </section>
+
+    </article>
+
+    <article class="appointment">
+
+      <section class="info">
+        <strong>Carlos Gómez</strong>
+        <span class="badge confirmed">Confirmada</span>
+        <p>Rocky · Perro · Bulldog</p>
+      </section>
+
+      <time class="time">2:00 PM</time>
+
+      <section class="actions">
+        <button>
+          <i class="fa-solid fa-video"></i>
+        </button>
+      </section>
+
+    </article>
+
+  </section>
+
+</main>

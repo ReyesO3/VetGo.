@@ -1,0 +1,37 @@
+@model IEnumerable<VetGo.Models.VeterinarioContactViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Veterinarios disponibles";
+}
+
+<link rel="stylesheet" href="~/vetgo_1/css/veterinarios.css" />
+
+<main class="content">
+  <h2>Nuestros Veterinarios</h2>
+  <p class="subtitle">Profesionales certificados y experimentados listos para cuidar de tu mascota</p>
+
+  <section class="vet-grid">
+    @foreach(var vet in Model)
+    {
+      <article class="vet-card">
+        <img src="~/vetgo_1/img/vet_placeholder.jpg" alt="Veterinario">
+        <h3>@vet.Nombre</h3>
+        <p class="specialty">Licencia: @vet.Licencia</p>
+        <span class="status @(vet.Disponible ? "available" : "unavailable")">@(vet.Disponible ? "Disponible" : "No Disponible")</span>
+        <p class="info">@vet.Email</p>
+        <div class="vet-actions">
+            <a asp-controller="Citas" asp-action="Create" asp-route-veterinarioId="@vet.VeterinarioId" class="btn primary">Agendar Cita</a>
+            @if(vet.UsuarioId > 0)
+            {
+                <a asp-controller="MensajesChats" asp-action="Create" asp-route-toId="@vet.UsuarioId" class="btn secondary">Chat</a>
+            }
+            else
+            {
+                <a class="btn secondary disabled">Chat no disponible</a>
+            }
+        </div>
+      </article>
+    }
+  </section>
+
+</main>

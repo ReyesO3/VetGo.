@@ -1,0 +1,70 @@
+@model IEnumerable<VetGo.Models.Mascota>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "VetGo - Pacientes";
+}
+
+<link rel="stylesheet" href="~/Veterinario/pacientes.css" />
+
+<!-- HEADER -->
+<header class="top-bar">
+    <section class="logo">
+        <h1>VetGo</h1>
+        <small>Dr./Dra. doc12</small>
+    </section>
+
+    <form asp-controller="Login" asp-action="Logout" method="post" class="logout-form">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="logout-btn">Cerrar Sesión</button>
+    </form>
+</header>
+
+<!-- MENÚ -->
+<nav class="menu">
+    <ul>
+        <li>
+            <a asp-controller="Veterinario" asp-action="Index">Inicio</a>
+        </li>
+        <li>
+            <a asp-controller="Veterinario" asp-action="Citas">Citas del Día</a>
+        </li>
+        <li class="active">
+            Pacientes
+        </li>
+        <li>
+            <a asp-controller="Veterinario" asp-action="Mensajes">Mensajes</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- CONTENIDO -->
+<main class="patients">
+    <section>
+        <header class="patients-header">
+            <h2>Mis Pacientes</h2>
+            <p>Lista de pacientes bajo tu cuidado</p>
+        </header>
+
+        <ul class="patients-list">
+        @if (Model != null && Model.Any())
+        {
+            foreach(var m in Model)
+            {
+                <li class="patient-item">
+                    <span><strong>@m.Nombre</strong> – @(m.Usuario?.Nombre ?? "-")</span>
+                    <a asp-controller="Historia_Clinica" asp-action="Index" asp-route-mascotaId="@m.IdMascota" class="btn secondary">Ver Historial</a>
+                </li>
+            }
+        }
+        else
+        {
+            <li>No hay pacientes asignados.</li>
+        }
+        </ul>
+    </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2025 VetGo - Sistema de Gestión Veterinaria</p>
+</footer>

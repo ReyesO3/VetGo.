@@ -1,0 +1,118 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "VetGo - Inicio de Sesión Veterinario";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/vetgo_1/css/login_forms.css" />
+    <style>
+        /* fallback styles */
+        body { background: linear-gradient(to right, #dbeafe, #e0f2fe); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { width: 720px; margin: 40px auto; background: #f8fafc; padding: 20px; border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); display:flex; gap:20px; }
+        .left { flex:1 }
+        .right { flex:1 }
+        .btn-primary { display:inline-block; padding:8px 12px; background:#2563eb; color:#fff; border-radius:6px; text-decoration:none }
+        .btn-primary.activo { background:#1e40af }
+        .captcha-box { display:inline-block; padding:10px 14px; background:#dbeafe; border-radius:6px; letter-spacing:6px; font-weight:600; }
+        .verify-btn { margin-left:8px }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SECCIÓN IZQUIERDA -->
+        <section class="left">
+            <h2>Cuidado veterinario profesional al alcance de tu mano</h2>
+        </section>
+
+        <!-- SECCIÓN DERECHA -->
+        <section class="right" aria-label="Formulario de ingreso">
+            <article>
+                <h2>Iniciar Sesión Veterinario</h2>
+                <p>Ingresa a tu cuenta para continuar</p>
+            </article>
+
+            <!-- SELECTOR DE ROL -->
+            <nav class="roles" aria-label="Selector de rol" style="margin:8px 0 12px 0;">
+                <a class="btn-secondary" href="/Login">Dueño</a>
+                <a href="/Login/Veterinario">Profesional</a>
+                <a href="/Login/Admin">Admin</a>
+            </nav>
+
+            <!-- FORMULARIO -->
+            <form method="post" id="loginForm" asp-action="Index" asp-controller="Login">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="role" value="Veterinario" />
+
+                <fieldset>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+                </fieldset>
+
+                <fieldset>
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="********" required />
+                </fieldset>
+
+                <!-- CAPTCHA -->
+                <fieldset>
+                    <label>Código de verificación</label>
+                    <article class="captcha-row">
+                        <span class="captcha-box" id="captcha">S S b G y 7</span>
+                        <button type="button" class="verify-btn" id="refreshCaptcha" title="Generar código">⟳</button>
+                    </article>
+                    <input id="captchaInput" name="captchaInput" type="text" placeholder="Ingresa el código" />
+                </fieldset>
+
+                <nav aria-label="Acciones" style="margin-top:12px;">
+                    <button type="submit" class="btn-login">Iniciar Sesion</button>
+                </nav>
+            </form>
+
+            <!-- FOOTER -->
+            <footer style="margin-top:12px;">
+        <div class="links" style="margin-top:12px; font-size:13px;">
+            <a href="/Login/Register">¿No tienes cuenta? Regístrate</a>
+        </div>
+            </footer>
+        </section>
+    </div>
+
+    <script>
+    function randomCaptcha(){
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+      let out = '';
+      for(let i=0;i<6;i++){
+        out += chars[Math.floor(Math.random()*chars.length)];
+        if(i < 5) out += ' ';
+      }
+      return out;
+    }
+
+    const capBox = document.getElementById('captcha');
+    const refresh = document.getElementById('refreshCaptcha');
+    if(refresh && capBox){
+      refresh.onclick = () => { capBox.textContent = randomCaptcha(); };
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      const expected = capBox.textContent.replace(/\s/g,'');
+      const typed = document.getElementById('captchaInput').value.replace(/\s/g,'');
+
+      if(!typed){
+        alert('Por favor ingresa el código de verificación');
+        e.preventDefault();
+        return;
+      }
+
+      if(typed !== expected){
+        alert('Código incorrecto');
+        e.preventDefault();
+      }
+    });
+    </script>
+</body>
+</html>

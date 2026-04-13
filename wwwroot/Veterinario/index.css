@@ -1,0 +1,231 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* BODY */
+body {
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* HEADER SUPERIOR */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo i {
+    font-size: 22px;
+    color: #2563eb;
+}
+
+.logo span {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.logo small {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.logout-btn {
+    text-decoration: none;
+    background: #f1f5f9;
+    padding: 8px 15px;
+    border-radius: 8px;
+    color: #333;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #e2e8f0;
+}
+
+/* MENÚ */
+.menu {
+    background: #ffffff;
+    padding: 10px 30px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.menu ul {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+.menu li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.menu li.active {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+/* MAIN */
+main {
+    padding: 30px;
+}
+
+/* TARJETAS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    position: relative;
+}
+
+.stat-card h2 {
+    color: #2563eb;
+    font-size: 28px;
+}
+
+.stat-card p {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.stat-card i {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #cbd5f5;
+    font-size: 20px;
+}
+
+/* APPOINTMENTS */
+.appointments {
+    margin-top: 30px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.appointments-header h3 {
+    font-size: 18px;
+}
+
+.appointments-header p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 15px;
+}
+
+/* CITA */
+.appointment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f9fafb;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.appointment:hover {
+    background: #f1f5f9;
+}
+
+/* INFO */
+.info strong {
+    display: block;
+    font-size: 14px;
+}
+
+.info p {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* BADGES */
+.badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-left: 8px;
+}
+
+.confirmed {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.pending {
+    background: #fef9c3;
+    color: #ca8a04;
+}
+
+/* TIME */
+.time {
+    font-size: 14px;
+    color: #374151;
+}
+
+/* ACTIONS */
+.actions button {
+    background: #e5e7eb;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.actions button:hover {
+    background: #d1d5db;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .menu ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

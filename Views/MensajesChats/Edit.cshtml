@@ -1,0 +1,70 @@
+﻿@model VetGo.Models.MensajesChat
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>MensajesChat</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdMensaje" />
+            <div class="form-group">
+                <label asp-for="IdEmisor" class="control-label"></label>
+                <input asp-for="IdEmisor" class="form-control" />
+                <span asp-validation-for="IdEmisor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdReceptor" class="control-label"></label>
+                <input asp-for="IdReceptor" class="form-control" />
+                <span asp-validation-for="IdReceptor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdCita" class="control-label"></label>
+                <input asp-for="IdCita" class="form-control" />
+                <span asp-validation-for="IdCita" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contenido" class="control-label"></label>
+                <input asp-for="Contenido" class="form-control" />
+                <span asp-validation-for="Contenido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoMensaje" class="control-label"></label>
+                <input asp-for="TipoMensaje" class="form-control" />
+                <span asp-validation-for="TipoMensaje" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Leido" class="control-label"></label>
+                <input asp-for="Leido" class="form-control" />
+                <span asp-validation-for="Leido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaEnvio" class="control-label"></label>
+                <input asp-for="FechaEnvio" class="form-control" />
+                <span asp-validation-for="FechaEnvio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>

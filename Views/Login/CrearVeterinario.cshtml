@@ -1,0 +1,141 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "VetGo - Crear Cuenta Veterinario";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/vetgo_1/css/crear_veterinarios.css" />
+    <style>
+        /* Minimal fallback */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(to right,#dbeafe,#e0f2fe); }
+        main { max-width:1000px; margin:28px auto; display:flex; gap:24px; }
+        .left { flex:1 }
+        .right { flex:1 }
+        .tabs .tab { margin-right:8px; text-decoration:none }
+    </style>
+</head>
+<body>
+
+<header>
+    <section class="brand">
+        <span class="logo">❤</span>
+        <h1>VetGo</h1>
+        <p class="tagline">Cuidado veterinario profesional al alcance de tu mano</p>
+    </section>
+</header>
+
+<main>
+    <!-- Sección derecha -->
+    <section class="right" role="region" aria-label="Formulario de registro veterinario">
+
+        <h2 class="create-title">Crear Cuenta</h2>
+        <p class="create-sub">Regístrate como profesional veterinario</p>
+
+        <!-- Tabs -->
+        <nav class="tabs" role="tablist" aria-label="Tipo de usuario">
+            <a href="@Url.Action("Register","Login")?rol=Usuario" class="tab">Dueño</a>
+            <span class="tab active">Profesional</span>
+            <a href="@Url.Action("Register","Login")?rol=Admin" class="tab">Admin</a>
+        </nav>
+
+        <!-- Formulario -->
+        <form id="registerForm" method="post" asp-action="Register" asp-controller="Login">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="rol" value="Veterinario" />
+
+            <section class="field">
+                <label for="fullname">Nombre Completo</label>
+                <input id="fullname" name="nombre" type="text" placeholder="Juan Pérez" required />
+            </section>
+
+            <section class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="tu@email.com" required />
+            </section>
+
+            <section class="field">
+                <label for="password">Contraseña</label>
+                <input id="password" name="password" type="password" required />
+            </section>
+
+            <section class="field">
+                <label for="licencia">Licencia Profesional</label>
+                <input id="licencia" name="licencia" type="text" placeholder="VET-12345" required />
+            </section>
+
+            <!-- CAPTCHA -->
+            <section class="field">
+                <label>Código de verificación</label>
+
+                <article class="captcha-row">
+                    <span class="captcha-box" id="captcha"></span>
+                    <button type="button" class="verify-btn" id="refreshCaptcha" title="Generar código">⟳</button>
+                </article>
+
+                <input id="captchaInput" name="captchaInput" type="text" placeholder="Ingresa el código" required />
+            </section>
+
+            <nav class="tabs" aria-label="Acciones">
+                <button type="submit" class="tab active">Registrarse</button>
+            </nav>
+
+            <a class="small-link" href="@Url.Action("Veterinario","Login")">
+                ¿Ya tienes cuenta? Inicia sesión
+            </a>
+
+            <footer class="credit">© VetGo</footer>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script>
+    function randomCaptcha() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+        let out = '';
+        for (let i = 0; i < 6; i++) {
+            out += chars.charAt(Math.floor(Math.random() * chars.length));
+            if (i < 5) out += ' ';
+        }
+        return out;
+    }
+
+    const capBox = document.getElementById('captcha');
+    const refresh = document.getElementById('refreshCaptcha');
+
+    if (capBox) capBox.textContent = randomCaptcha();
+    if (refresh) {
+        refresh.addEventListener('click', () => {
+            if (capBox) capBox.textContent = randomCaptcha();
+        });
+    }
+
+    const form = document.getElementById('registerForm');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            const expected = (capBox?.textContent || '').replace(/\s/g, '');
+            const typed = (document.getElementById('captchaInput') || { value: '' }).value.replace(/\s/g, '');
+
+            if (!typed) {
+                e.preventDefault();
+                alert('Por favor ingresa el código de verificación.');
+                return;
+            }
+
+            if (typed !== expected) {
+                e.preventDefault();
+                alert('Código incorrecto. Intenta nuevamente.');
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

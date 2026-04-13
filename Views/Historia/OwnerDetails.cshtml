@@ -1,0 +1,21 @@
+@model VetGo.Models.Mascota
+@{
+    ViewData["Title"] = "Historial de " + Model.Nombre;
+}
+
+<div class="profile-header">
+    <h2>Historial de @Model.Nombre</h2>
+    <p>ID: @Model.Id | Especie: @Model.Especie | Edad: @Model.Edad</p>
+</div>
+
+<div class="history-list">
+@foreach(var h in Model.Historia_Clinica.OrderByDescending(x => x.Fecha))
+{
+    <div class="card">
+        <div><strong>Fecha:</strong> @h.Fecha.ToString("dd/MM/yyyy")</div>
+        <div><strong>Diagnóstico:</strong> @h.Diagnostico</div>
+        <div><strong>Tratamiento:</strong> @h.Tratamiento</div>
+        <div><strong>Veterinario:</strong> @h.Veterinario?.Nombre</div>
+    </div>
+}
+</div>

@@ -1,0 +1,44 @@
+﻿@model VetGo.ViewModels.CitaCreateViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Agendar Cita</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Cita.Fecha" class="control-label"></label>
+                <input asp-for="Cita.Fecha" class="form-control" />
+                <span asp-validation-for="Cita.Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cita.Motivo" class="control-label"></label>
+                <input asp-for="Cita.Motivo" class="form-control" />
+                <span asp-validation-for="Cita.Motivo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cita.Mascota" class="control-label"></label>
+                <select asp-for="Cita.Mascota" class="form-control" asp-items="Model.MascotasSelectList">
+                    <option value="">-- Selecciona Mascota --</option>
+                </select>
+                <span asp-validation-for="Cita.Mascota" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Veterinario</label>
+                <input class="form-control" value="@Model.VeterinarioNombre" readonly />
+                <input type="hidden" asp-for="Cita.Veterinario" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Agendar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver</a>
+</div>
